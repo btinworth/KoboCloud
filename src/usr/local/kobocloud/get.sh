@@ -66,6 +66,11 @@ lib_list_before=$(find "$Lib" -type f ! -name "*.log" -exec stat -c '%s %n' {} \
 echo "Current Library list"
 echo "$lib_list_before"
 
+if grep -q "^REMOVE_DELETED$" $UserConfig; then
+  command="sync" # Remove deleted, do a sync.
+else
+  command="copy" # Don't remove deleted, do a copy.
+fi
 
 while read url || [ -n "$url" ]; do
   if echo "$url" | grep -q '^#'; then
@@ -74,14 +79,6 @@ while read url || [ -n "$url" ]; do
 	  echo "Will delete files no longer present on remote"
   elif [ -n "$url" ]; then
     echo "Getting $url"
-    command=""
-    if grep -q "^REMOVE_DELETED$" $UserConfig; then
-      # Remove deleted, do a sync.
-      command="sync"
-    else
-      # Don't remove deleted, do a copy.
-      command="copy"
-    fi
     remote=$(echo "$url" | cut -d: -f1)
     dir="$Lib/$remote/"
     mkdir -p "$dir"

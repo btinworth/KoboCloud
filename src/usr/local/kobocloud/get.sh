@@ -61,8 +61,8 @@ then
   fi
 fi
 
-#list file in lib dir before sync
-lib_list_before=`ls -lnR --full-time "$Lib" | grep -v -e ".*\.log$" -e "^total [0-9]\+"`
+#list file in lib dir before sync (name and size only, matching --size-only)
+lib_list_before=$(find "$Lib" -type f ! -name "*.log" -exec stat -c '%s %n' {} \; | sort)
 echo "Current Library list"
 echo "$lib_list_before"
 
@@ -85,14 +85,14 @@ while read url || [ -n "$url" ]; do
     remote=$(echo "$url" | cut -d: -f1)
     dir="$Lib/$remote/"
     mkdir -p "$dir"
-    echo ${RCLONE} ${command} --no-check-certificate -v --config ${RCloneConfig} \"$url\" \"$dir\"
-    ${RCLONE} ${command} --no-check-certificate -v --config ${RCloneConfig} "$url" "$dir"
+    echo ${RCLONE} ${command} --no-check-certificate --size-only -v --config ${RCloneConfig} \"$url\" \"$dir\"
+    ${RCLONE} ${command} --no-check-certificate --size-only -v --config ${RCloneConfig} "$url" "$dir"
   fi
 done < $UserConfig
 
-#list file in lib dir after sync
+#list file in lib dir after sync (name and size only, matching --size-only)
 echo "New Library list"
-lib_list_after=`ls -lnR --full-time "$Lib" | grep -v -e ".*\.log$" -e "^total [0-9]\+"`
+lib_list_after=$(find "$Lib" -type f ! -name "*.log" -exec stat -c '%s %n' {} \; | sort)
 echo "$lib_list_after"
 
 #compare filelist before and after

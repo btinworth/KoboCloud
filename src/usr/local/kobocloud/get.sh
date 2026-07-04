@@ -26,15 +26,14 @@ then
     echo "`$Dt` waiting for internet connection"
     r=1;i=0
     while [ $r != 0 ]; do
-    if [ $i -gt 60 ]; then
-        ping -c 1 -w 3 aws.amazon.com >/dev/null 2>&1
-        echo "`$Dt` error! no connection detected"
-        exit 1
-    fi
-    ping -c 1 -w 3 aws.amazon.com >/dev/null 2>&1
-    r=$?
-    if [ $r != 0 ]; then sleep 1; fi
-    i=$(($i + 1))
+        if [ $i -gt 60 ]; then
+            echo "`$Dt` error! no connection detected"
+            exit 1
+        fi
+        ping -c 1 -w 3 1.1.1.1 >/dev/null 2>&1
+        r=$?
+        if [ $r != 0 ]; then sleep 1; fi
+        i=$(($i + 1))
     done
 fi
 

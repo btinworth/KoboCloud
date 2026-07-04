@@ -1,4 +1,5 @@
 # KoboCloud
+
 A set of scripts to synchronize a kobo reader with popular cloud services, using [rclone](https://rclone.org).
 
 Some example supported cloud services:
@@ -9,12 +10,11 @@ Some example supported cloud services:
 - pCloud
 - Box
 
-There are many more - see https://rclone.org/docs/ for the full list.
+There are many more - see <https://rclone.org/docs> for the full list.
 
+## Installation
 
-## <a name="installation"></a>Installation
-
-Download the latest `KoboRoot.tgz` from the Release page (or using [this direct link](https://github.com/marklar423/KoboCloud-rclone/releases/tag/latest)).
+Download the latest `KoboRoot.tgz` from the latest Build action, from [this page](https://github.com/btinworth/KoboCloud/actions/workflows/build.yml).
 
 Copy it into the Kobo device:
 
@@ -42,7 +42,7 @@ After the installation process:
 
 (Note: this is after going through the configuraton steps above)
 
-```
+```ini
 # Lines starting with '#' are ignored
 # Google drive:
 my_google_drive:foldername
@@ -51,9 +51,10 @@ my_google_drive:foldername
 my_dropbox:other/folder/name
 ```
 
-rclone supports many, many other remote types. See https://rclone.org/docs/ for the full list.
+rclone supports many, many other remote types. See <https://rclone.org/docs> for the full list.
 
 ### Matching remote server
+
 To delete files from library when they are no longer in the remote server:
 
 - Edit the kobocloudrc file so it contains the phrase `REMOVE_DELETED` in a single line (all capital, no spaces before or after).
@@ -62,7 +63,6 @@ To delete files from library when they are no longer in the remote server:
 The next time the Kobo is connected to the internet, it will delete any files (it will not delete directories) that are not in the remote server.
 
 (This works by running `rclone sync` instead of `rclone copy`),
-
 
 ## Usage
 
@@ -85,7 +85,7 @@ To install KoboCloud from source code:
 
 - Download this repository
 - Compile the code into an archive format (instructions below)
-- Follow [installation](#installation) instructions
+- Follow installation instructions
 
 ### Compiling
 
@@ -96,23 +96,24 @@ To install KoboCloud from source code:
 
 The last command will create a `KoboRoot.tgz` archive.
 
-Now you can follow [installation](#installation) instructions.
+Now you can follow installation instructions.
 
 ## Troubleshooting
 
-KoboCloud keeps a log of each session in the .add/kobocloud/get.log file. If something goes wrong, useful information can be found there. Please send a copy of this file with every bug report.
+KoboCloud keeps a log of each session in the `.add/kobocloud/get.log` file. If something goes wrong, useful information can be found there. Please send a copy of this file with every bug report.
 
 ## Known issues
 
-* Some versions of Kobo make the same book appear twice in the library. This is because it scans the internal directory where the files are saved as well as the "official" folders. To solve this problem find the `Kobo eReader.conf` file inside your `.kobo/Kobo` folder and make sure the following line (which prevents the syncing of dotfiles and dotfolders) is set in the `[FeatureSettings]` section:
-```
+Some versions of Kobo make the same book appear twice in the library. This is because it scans the internal directory where the files are saved as well as the "official" folders. To solve this problem find the `Kobo eReader.conf` file inside your `.kobo/Kobo` folder and make sure the following line (which prevents the syncing of dotfiles and dotfolders) is set in the `[FeatureSettings]` section:
+
+```ini
   ExcludeSyncFolders=\\.(?!add|adobe).*?
 ```
-
 
 ## Acknowledgment
 
 KoboCloud installs [NickelDBus](https://github.com/shermp/NickelDBus) if not present. Thanks to shermp for providing this!
 Thanks to the defunct SendToKobo service for the inspiration of the project and for the basis of the scripts.
-Curl for Kobo was downloaded from here: https://www.mobileread.com/forums/showthread.php?p=3734553 . Thanks to NiLuJe for providing it!
+Curl for Kobo was downloaded from here: <https://www.mobileread.com/forums/showthread.php?p=3734553>. Thanks to NiLuJe for providing it!
 Thanks to Christoph Burschka for the help in updating this tool to the recent versions of kobo and nextcloud.
+Initial rclone changes from <https://github.com/marklar423/KoboCloud-rclone>

@@ -2,17 +2,17 @@
 # KoboRclone getter
 
 # load config
-. $(dirname $0)/config.sh
+. "$(dirname "$0")/config.sh"
 export USER_CONFIG
 
 # check if KoboRclone contains the line "UNINSTALL"
-if grep -q '^UNINSTALL$' $USER_CONFIG; then
+if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
   echo "Uninstalling KoboRclone!"
-    $KC_HOME/uninstall.sh
+    "$KC_HOME/uninstall.sh"
     exit 0
 fi
 
-if grep -q "^REMOVE_DELETED$" $USER_CONFIG; then
+if grep -q "^REMOVE_DELETED$" "$USER_CONFIG"; then
 	echo "$LIB/filesList.log" > "$LIB/filesList.log"
 fi
 
@@ -51,7 +51,7 @@ lib_list_before=$(find "$LIB" -type f ! -name "*.log" -exec stat -c '%s %n' {} \
 echo "Current Library list"
 echo "$lib_list_before"
 
-if grep -q "^REMOVE_DELETED$" $USER_CONFIG; then
+if grep -q "^REMOVE_DELETED$" "$USER_CONFIG"; then
   command="sync" # remove deleted, do a sync
 else
   command="copy" # don't remove deleted, do a copy
@@ -67,10 +67,10 @@ while read url || [ -n "$url" ]; do
     remote=$(echo "$url" | cut -d: -f1)
     dir="$LIB/$remote/"
     mkdir -p "$dir"
-    echo ${RCLONE} ${command} --no-check-certificate --size-only -v --config ${RCLONE_CONFIG} \"$url\" \"$dir\"
-    ${RCLONE} ${command} --no-check-certificate --size-only -v --config ${RCLONE_CONFIG} "$url" "$dir"
+    printf 'Running: %s %s --no-check-certificate --size-only -v --config %s "%s" "%s"\n' "$RCLONE" "$command" "$RCLONE_CONFIG" "$url" "$dir"
+    "$RCLONE" "$command" --no-check-certificate --size-only -v --config "$RCLONE_CONFIG" "$url" "$dir"
   fi
-done < $USER_CONFIG
+done < "$USER_CONFIG"
 
 # list file in lib dir after sync (name and size only, matching --size-only)
 echo "New Library list"

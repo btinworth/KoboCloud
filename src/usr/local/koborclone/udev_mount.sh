@@ -1,19 +1,19 @@
 #!/bin/sh
 #load config
-. $(dirname $0)/config.sh
+. "$(dirname "$0")/config.sh"
 
 #create work dirs
 [ ! -e "$LOGS" ] && mkdir -p "$LOGS" >/dev/null 2>&1
 [ ! -e "$LIB" ] && mkdir -p "$LIB" >/dev/null 2>&1
 [ ! -e "$SD" ] && mkdir -p "$SD" >/dev/null 2>&1
 
-if [ ! -e $USER_CONFIG ]; then
-  if [ -e $CONFIG_FILE ]; then
-    cp $CONFIG_FILE $USER_CONFIG
+if [ ! -e "$USER_CONFIG" ]; then
+  if [ -e "$CONFIG_FILE" ]; then
+    cp "$CONFIG_FILE" "$USER_CONFIG"
   else
-    echo "# Add your rclone remote:folder/on/remote pairs to this file" > $USER_CONFIG
-    echo "# Remove the # from the following line to uninstall KoboRclone" >> $USER_CONFIG
-    echo "#UNINSTALL" >> $USER_CONFIG
+    echo "# Add your rclone remote:folder/on/remote pairs to this file" > "$USER_CONFIG"
+    echo "# Remove the # from the following line to uninstall KoboRclone" >> "$USER_CONFIG"
+    echo "#UNINSTALL" >> "$USER_CONFIG"
   fi
 fi
 

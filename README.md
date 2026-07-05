@@ -34,9 +34,9 @@ After the installation process:
 2. Run `rclone config` to create a config file and add your remote Cloud services ([detailed instructions](https://rclone.org/remote_setup/#configuring-by-copying-the-config-file)).
     - You can add as many remote Cloud services as you need, but note the name you give each remote.
 3. Plug your Kobo back into the computer
-4. Copy the rclone config file to `.add/koborclone/rclone.conf`
+4. Copy the rclone config file to `.adds/koborclone/rclone.conf`
     - Run `rclone config file` on your computer to find the file.
-5. Edit the configuration file located at `.add/koborclone/koborclone.conf`, and add each remote:directory pair (one per line).
+5. Edit the configuration file located at `.adds/koborclone/koborclone.conf`, and add each remote:directory pair (one per line).
 
 KoboRclone ships with a bundled rclone binary at `/usr/local/koborclone/bin/rclone` on device. This binary is downloaded by `makeKoboRoot.sh` during packaging.
 
@@ -79,7 +79,7 @@ To properly uninstall KoboRclone:
 
 The next time the Kobo is connected to the Internet, the program will delete itself.
 
-Note: The directory .add/koborclone will not be deleted: after connecting the device to a computer, you should move the files from the Library subfolder in order not to lose your content, and delete the whole koborclone directory manually.
+Note: The directory .adds/koborclone will not be deleted: after connecting the device to a computer, you should move the files from the Library subfolder in order not to lose your content, and delete the whole koborclone directory manually.
 
 ## Installation from source code
 
@@ -103,14 +103,14 @@ Now you can follow installation instructions.
 
 ## Troubleshooting
 
-KoboRclone keeps a log of each session in the `.add/koborclone/get.log` file. If something goes wrong, useful information can be found there. Please send a copy of this file with every bug report.
+KoboRclone keeps a log of each session in the `.adds/koborclone/get.log` file. If something goes wrong, useful information can be found there. Please send a copy of this file with every bug report.
 
 ## Known issues
 
 Some versions of Kobo make the same book appear twice in the library. This is because it scans the internal directory where the files are saved as well as the "official" folders. To solve this problem find the `Kobo eReader.conf` file inside your `.kobo/Kobo` folder and make sure the following line (which prevents the syncing of dotfiles and dotfolders) is set in the `[FeatureSettings]` section:
 
 ```ini
-  ExcludeSyncFolders=\\.(?!add|adobe).*?
+  ExcludeSyncFolders=\\.(?!adds|adobe).*?
 ```
 
 ## Acknowledgment

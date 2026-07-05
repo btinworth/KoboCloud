@@ -15,4 +15,4 @@ fi
 [ ! -e "$SD" ] && mkdir -p "$SD" >/dev/null 2>&1
 
 # output to log
-"$KC_HOME/get.sh" > "$LOGS/get.log" 2>&1 &
+"$KC_HOME/koborclone.sh" > "$LOGS/log.txt" 2>&1 &

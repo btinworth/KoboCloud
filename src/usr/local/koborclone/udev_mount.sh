@@ -9,8 +9,8 @@
 [ ! -e "$SD" ] && mkdir -p "$SD" >/dev/null 2>&1
 
 if [ ! -e "$USER_CONFIG" ]; then
-  if [ -e "$CONFIG_TEMPLATE" ]; then
-    cp "$CONFIG_TEMPLATE" "$USER_CONFIG"
+  if [ -e "$USER_CONFIG_TEMPLATE" ]; then
+    cp "$USER_CONFIG_TEMPLATE" "$USER_CONFIG"
   else
     : > "$USER_CONFIG"
   fi

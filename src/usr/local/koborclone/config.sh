@@ -6,7 +6,6 @@ RCLONE_CONFIG_TEMPLATE="$KC_HOME/rclone.conf.tmpl"
 
 LOGS=/mnt/onboard/.adds/koborclone
 LIB=/mnt/onboard
-SD=/mnt/sd/koborclone
 
 DT="date +%Y-%m-%d_%H:%M:%S"
 

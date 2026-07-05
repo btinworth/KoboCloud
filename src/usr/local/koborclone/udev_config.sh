@@ -6,7 +6,6 @@
 # create work dirs
 [ ! -e "$LOGS" ] && mkdir -p "$LOGS" >/dev/null 2>&1
 [ ! -e "$LIB" ] && mkdir -p "$LIB" >/dev/null 2>&1
-[ ! -e "$SD" ] && mkdir -p "$SD" >/dev/null 2>&1
 
 if [ ! -e "$USER_CONFIG" ]; then
   if [ -e "$USER_CONFIG_TEMPLATE" ]; then
@@ -22,10 +21,4 @@ if [ ! -e "$RCLONE_CONFIG" ]; then
   else
     : > "$RCLONE_CONFIG"
   fi
-fi
-
-# bind mount to subfolder of SD card on reboot
-if ! mountpoint -q "$SD"; then
-  mount --bind "$LIB" "$SD"
-  echo sd add /dev/mmcblk1p1 >> /tmp/nickel-hardware-status
 fi

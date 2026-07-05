@@ -12,7 +12,6 @@ fi
 # create work dirs
 [ ! -e "$LOGS" ] && mkdir -p "$LOGS" >/dev/null 2>&1
 [ ! -e "$LIB" ] && mkdir -p "$LIB" >/dev/null 2>&1
-[ ! -e "$SD" ] && mkdir -p "$SD" >/dev/null 2>&1
 
 # output to log
 "$KC_HOME/koborclone.sh" > "$LOGS/log.txt" 2>&1 &

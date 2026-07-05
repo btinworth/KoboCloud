@@ -4,10 +4,35 @@
 . "$(dirname "$0")/config.sh"
 export USER_CONFIG
 
-# check if KoboRclone contains the line "UNINSTALL"
+# create dirs
+[ ! -e "$LOGS" ] && mkdir -p "$LOGS" >/dev/null 2>&1
+[ ! -e "$LIB" ] && mkdir -p "$LIB" >/dev/null 2>&1
+
+# create user config if it doesn't exist
+if [ ! -e "$USER_CONFIG" ]; then
+  echo "No user config, creating at $USER_CONFIG"
+  if [ -e "$USER_CONFIG_TEMPLATE" ]; then
+    cp "$USER_CONFIG_TEMPLATE" "$USER_CONFIG"
+  else
+    : > "$USER_CONFIG"
+  fi
+fi
+
+# create rclone config if it doesn't exist
+if [ ! -e "$RCLONE_CONFIG" ]; then
+  echo "No rclone config, creating at $RCLONE_CONFIG"
+  if [ -e "$RCLONE_CONFIG_TEMPLATE" ]; then
+    cp "$RCLONE_CONFIG_TEMPLATE" "$RCLONE_CONFIG"
+  else
+    : > "$RCLONE_CONFIG"
+  fi
+fi
+
+# check if user config contains the line "UNINSTALL"
 if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
-  echo "Uninstalling KoboRclone!"
-  "$KC_HOME/uninstall.sh"
+  echo "Uninstalling"
+
+  rm -rf /usr/local/koborclone/ /etc/udev/rules.d/97-koborclone.rules
   exit 0
 fi
 

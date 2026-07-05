@@ -1,5 +1,4 @@
 #!/bin/sh
-# KoboRclone getter
 
 # load config
 . "$(dirname "$0")/config.sh"
@@ -8,31 +7,33 @@ export USER_CONFIG
 # check if KoboRclone contains the line "UNINSTALL"
 if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
   echo "Uninstalling KoboRclone!"
-    "$KC_HOME/uninstall.sh"
-    exit 0
+  "$KC_HOME/uninstall.sh"
+  exit 0
 fi
 
 if grep -q "^REMOVE_DELETED$" "$USER_CONFIG"; then
-	echo "$LIB/filesList.log" > "$LIB/filesList.log"
+  echo "$LIB/filesList.log" > "$LIB/filesList.log"
 fi
 
 # check internet connection
-echo "`$DT` waiting for internet connection"
-r=1;i=0
-while [ $r != 0 ]; do
-  if [ $i -gt 60 ]; then
-    echo "`$DT` error! no connection detected"
+echo "$($DT) waiting for internet connection"
+r=1
+i=0
+while [ "$r" -ne 0 ]; do
+  if [ "$i" -gt 60 ]; then
+    echo "$($DT) error! no connection detected"
     exit 1
   fi
   ping -c 1 -w 3 1.1.1.1 >/dev/null 2>&1
   r=$?
-  if [ $r != 0 ]; then sleep 1; fi
-  i=$(($i + 1))
+  if [ "$r" -ne 0 ]; then
+    sleep 1
+  fi
+  i=$((i + 1))
 done
 
 # check for qbdb
-if [ -f "/usr/bin/qndb" ]
-then
+if [ -f "/usr/bin/qndb" ]; then
   echo "NickelDBus found"
 else
   echo "NickelDBus not found: installing it!"
@@ -40,8 +41,7 @@ else
 fi
 
 # check for rclone
-if [ ! -x "${RCLONE}" ]
-then
+if [ ! -x "${RCLONE}" ]; then
   echo "rclone missing: binary at ${RCLONE}"
   exit 1
 fi
@@ -57,11 +57,11 @@ else
   command="copy" # don't remove deleted, do a copy
 fi
 
-while read url || [ -n "$url" ]; do
+while IFS= read -r url || [ -n "$url" ]; do
   if echo "$url" | grep -q '^#'; then
     continue
   elif echo "$url" | grep -q "^REMOVE_DELETED$"; then
-	  echo "Will delete files no longer present on remote"
+    echo "Will delete files no longer present on remote"
   elif [ -n "$url" ]; then
     echo "Getting $url"
     remote=$(echo "$url" | cut -d: -f1)
@@ -77,9 +77,8 @@ echo "New Library list"
 lib_list_after=$(find "$LIB" -type f ! -name "*.log" -exec stat -c '%s %n' {} \; | sort)
 echo "$lib_list_after"
 
-# compare filelist before and after
-if [ "$lib_list_after" = "$lib_list_before" ]
-then
+# compare file list before and after
+if [ "$lib_list_after" = "$lib_list_before" ]; then
   echo "No Library Change. skipping rescan"
 else
   echo "Library has changed, rescan needed"
@@ -89,4 +88,4 @@ else
 fi
 
 rm "$LOGS/index" >/dev/null 2>&1
-echo "`$DT` done"
+echo "$($DT) done"

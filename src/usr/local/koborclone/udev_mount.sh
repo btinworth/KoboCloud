@@ -1,8 +1,9 @@
 #!/bin/sh
-#load config
+
+# load config
 . "$(dirname "$0")/config.sh"
 
-#create work dirs
+# create work dirs
 [ ! -e "$LOGS" ] && mkdir -p "$LOGS" >/dev/null 2>&1
 [ ! -e "$LIB" ] && mkdir -p "$LIB" >/dev/null 2>&1
 [ ! -e "$SD" ] && mkdir -p "$SD" >/dev/null 2>&1
@@ -17,7 +18,7 @@ if [ ! -e "$USER_CONFIG" ]; then
   fi
 fi
 
-#bind mount to subfolder of SD card on reboot
+# bind mount to subfolder of SD card on reboot
 mountpoint -q "$SD"
 if [ $? -ne 0 ]; then
   mount --bind "$LIB" "$SD"

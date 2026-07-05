@@ -14,8 +14,6 @@ if [ ! -e $UserConfig ]; then
     echo "# Add your rclone remote:folder/on/remote pairs to this file" > $UserConfig
     echo "# Remove the # from the following line to uninstall KoboCloud" >> $UserConfig
     echo "#UNINSTALL" >> $UserConfig
-    echo "# Remove the # from the following line to have less curl verbose in log" >> $UserConfig
-    echo "#NO_CURL_VERBOSE" >> $UserConfig
   fi
 fi
 

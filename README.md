@@ -114,6 +114,5 @@ Some versions of Kobo make the same book appear twice in the library. This is be
 
 KoboCloud installs [NickelDBus](https://github.com/shermp/NickelDBus) if not present. Thanks to shermp for providing this!
 Thanks to the defunct SendToKobo service for the inspiration of the project and for the basis of the scripts.
-Curl for Kobo was downloaded from here: <https://www.mobileread.com/forums/showthread.php?p=3734553>. Thanks to NiLuJe for providing it!
 Thanks to Christoph Burschka for the help in updating this tool to the recent versions of kobo and nextcloud.
 Initial rclone changes from <https://github.com/marklar423/KoboCloud-rclone>

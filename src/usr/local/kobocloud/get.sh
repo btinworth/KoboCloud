@@ -1,8 +1,6 @@
 #!/bin/sh
 #Kobocloud getter
 
-TEST=$1
-
 RCLONE_VERSION="1.74.3"
 
 #load config
@@ -20,22 +18,19 @@ if grep -q "^REMOVE_DELETED$" $UserConfig; then
 fi
 
 
-if [ "$TEST" = "" ]
-then
-    #check internet connection
-    echo "`$Dt` waiting for internet connection"
-    r=1;i=0
-    while [ $r != 0 ]; do
-        if [ $i -gt 60 ]; then
-            echo "`$Dt` error! no connection detected"
-            exit 1
-        fi
-        ping -c 1 -w 3 1.1.1.1 >/dev/null 2>&1
-        r=$?
-        if [ $r != 0 ]; then sleep 1; fi
-        i=$(($i + 1))
-    done
-fi
+#check internet connection
+echo "`$Dt` waiting for internet connection"
+r=1;i=0
+while [ $r != 0 ]; do
+  if [ $i -gt 60 ]; then
+    echo "`$Dt` error! no connection detected"
+    exit 1
+  fi
+  ping -c 1 -w 3 1.1.1.1 >/dev/null 2>&1
+  r=$?
+  if [ $r != 0 ]; then sleep 1; fi
+  i=$(($i + 1))
+done
 
 # check for qbdb
 if [ "$PLATFORM" = "Kobo" ]
@@ -99,11 +94,8 @@ then
 else
   echo "Library has changed, rescan needed"
 
-  if [ "$TEST" = "" ]
-  then
-      # Use NickelDBus for library refresh
-      /usr/bin/qndb -t 3000 -s pfmDoneProcessing -m pfmRescanBooksFull
-  fi
+  # Use NickelDBus for library refresh
+  /usr/bin/qndb -t 3000 -s pfmDoneProcessing -m pfmRescanBooksFull
 fi
 
 rm "$Logs/index" >/dev/null 2>&1

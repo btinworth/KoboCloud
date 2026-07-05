@@ -1,11 +1,14 @@
 #!/bin/bash
 
-KC_HOME=$(dirname $0)
+KC_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 ConfigFile=$KC_HOME/kobocloudrc.tmpl
 
-if uname -a | grep -q 'x86\|Darwin'
-then
-    . $KC_HOME/config_pc.sh
-else
-    . $KC_HOME/config_kobo.sh
-fi
+Logs=/mnt/onboard/.add/kobocloud
+Lib=/mnt/onboard/.add/kobocloud/Library
+SD=/mnt/sd/kobocloud
+UserConfig=/mnt/onboard/.add/kobocloud/kobocloudrc
+RCloneConfig=/mnt/onboard/.add/kobocloud/rclone.conf
+Dt="date +%Y-%m-%d_%H:%M:%S"
+RCLONEDIR="/mnt/onboard/.add/kobocloud/bin/"
+RCLONE="${RCLONEDIR}rclone"
+PLATFORM=Kobo

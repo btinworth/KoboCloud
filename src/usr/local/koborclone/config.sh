@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-KC_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+KC_HOME=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 CONFIG_FILE=$KC_HOME/koborclonerc.tmpl
 
 LOGS=/mnt/onboard/.add/koborclone

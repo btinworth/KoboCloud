@@ -4,8 +4,7 @@
 . "$(dirname "$0")/config.sh"
 export USER_CONFIG
 
-# create dirs
-[ ! -e "$LOGS" ] && mkdir -p "$LOGS" >/dev/null 2>&1
+# create lib dir
 [ ! -e "$LIB" ] && mkdir -p "$LIB" >/dev/null 2>&1
 
 # create user config if it doesn't exist
@@ -38,20 +37,20 @@ if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
 fi
 
 # check internet connection
-echo "$($DT) waiting for internet connection"
-r=1
-i=0
-while [ "$r" -ne 0 ]; do
-  if [ "$i" -gt 60 ]; then
-    echo "$($DT) error! no connection detected"
+echo "$($DT) Checking internet connection"
+ping_exit_code=1
+ping_retries=0
+while [ "$ping_exit_code" -ne 0 ]; do
+  if [ "$ping_retries" -gt 60 ]; then
+    echo "$($DT) ERROR! No internet connection detected"
     exit 1
   fi
   ping -c 1 -w 3 1.1.1.1 >/dev/null 2>&1
-  r=$?
-  if [ "$r" -ne 0 ]; then
+  ping_exit_code=$?
+  if [ "$ping_exit_code" -ne 0 ]; then
     sleep 1
   fi
-  i=$((i + 1))
+  ping_retries=$((ping_retries + 1))
 done
 
 # check for qbdb
@@ -105,5 +104,4 @@ else
   /usr/bin/qndb -t 3000 -s pfmDoneProcessing -m pfmRescanBooksFull
 fi
 
-rm "$LOGS/index" >/dev/null 2>&1
 echo "$($DT) done"

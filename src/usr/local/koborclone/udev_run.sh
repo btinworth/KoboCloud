@@ -9,5 +9,8 @@ fi
 # load config
 . "$(dirname "$0")/config.sh"
 
+# create log dir
+[ ! -e "$LOGS" ] && mkdir -p "$LOGS" >/dev/null 2>&1
+
 # run the main script and redirect output to log
-"$KC_HOME/run.sh" > "$LOGS/log.txt" 2>&1 &
+"$KOBORCLONE_DIR/run.sh" > "$LOGS/koborclone.log" 2>&1 &

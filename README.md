@@ -36,7 +36,7 @@ After the installation process:
 3. Plug your Kobo back into the computer
 4. Copy the rclone config file to `.add/koborclone/rclone.conf`
     - Run `rclone config file` on your computer to find the file.
-5. Edit the configuration file located at `.add/koborclone/koborclonerc`, and add each remote:directory pair (one per line).
+5. Edit the configuration file located at `.add/koborclone/koborclone.conf`, and add each remote:directory pair (one per line).
 
 KoboRclone ships with a bundled rclone binary at `/usr/local/koborclone/bin/rclone` on device. This binary is downloaded by `makeKoboRoot.sh` during packaging.
 
@@ -59,7 +59,7 @@ rclone supports many, many other remote types. See <https://rclone.org/docs> for
 
 To delete files from library when they are no longer in the remote server:
 
-- Edit the koborclonerc file so it contains the phrase `REMOVE_DELETED` in a single line (all capital, no spaces before or after).
+- Edit the koborclone.conf file so it contains the phrase `REMOVE_DELETED` in a single line (all capital, no spaces before or after).
 - Restart your Kobo.
 
 The next time the Kobo is connected to the internet, it will delete any files (it will not delete directories) that are not in the remote server.
@@ -74,7 +74,7 @@ The new files will be downloaded when the kobo connects to the Internet for a sy
 
 To properly uninstall KoboRclone:
 
-- Edit the koborclonerc file so that it contains the word `UNINSTALL` in a single line (all capital, no spaces before or after)
+- Edit the koborclone.conf file so that it contains the word `UNINSTALL` in a single line (all capital, no spaces before or after)
 - Restart your Kobo
 
 The next time the Kobo is connected to the Internet, the program will delete itself.
@@ -93,7 +93,7 @@ To install KoboRclone from source code:
 
 - Move to the project directory root
 - `makeKoboRoot.sh` downloads the latest Linux ARMv7 rclone release and places it at `src/usr/local/koborclone/bin/rclone` before building the archive.
-- Open the configuration file located at `src/usr/local/koborclone/koborclonerc.tmpl`
+- Open the configuration file located at `src/usr/local/koborclone/koborclone.conf.tmpl`
 - Add the links to the cloud services (see the configuration example that follow below)
 - Run `sh ./makeKoboRoot.sh`
 

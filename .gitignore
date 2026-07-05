@@ -1,4 +1,4 @@
 KoboRoot.tgz
-koborclonerc
+koborclone.conf
 src/usr/local/koborclone/bin/rclone
 .DS_Store

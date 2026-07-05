@@ -32,7 +32,8 @@ fi
 if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
   echo "Uninstalling"
 
-  rm -rf /usr/local/koborclone/ /etc/udev/rules.d/97-koborclone.rules
+  rm -rf /etc/udev/rules.d/97-koborclone.rules
+  rm -rf /usr/local/koborclone/
   exit 0
 fi
 
@@ -54,10 +55,8 @@ while [ "$r" -ne 0 ]; do
 done
 
 # check for qbdb
-if [ -f "/usr/bin/qndb" ]; then
-  echo "NickelDBus found"
-else
-  echo "NickelDBus not found: installing it!"
+if [ ! -f "/usr/bin/qndb" ]; then
+  echo "NickelDBus not found, installing..."
   wget "https://github.com/shermp/NickelDBus/releases/download/0.2.0/KoboRoot.tgz" -O - | tar xz -C /
 fi
 
@@ -67,39 +66,40 @@ if [ ! -x "${RCLONE}" ]; then
   exit 1
 fi
 
-# list file in lib dir before sync (name and size only, matching --size-only)
-lib_list_before=$(find "$LIB" -type f ! -name "*.log" -exec stat -c '%s %n' {} \; | sort)
-echo "Current Library list"
-echo "$lib_list_before"
+if pgrep -x rclone >/dev/null 2>&1; then
+  echo "Another rclone process is already running. Exiting."
+  exit 0
+fi
 
+changes=false
+
+# loop through each line in the user config file
 while IFS= read -r url || [ -n "$url" ]; do
-  if echo "$url" | grep -q '^#'; then
-    continue
+  if echo "$url" | grep -q '^[[:space:]]*$'; then
+    continue # ignore blank/whitespace-only lines
+  elif echo "$url" | grep -q '^#'; then
+    continue # ignore comment lines
   elif [ -n "$url" ]; then
-    if pgrep -x rclone >/dev/null 2>&1; then
-      echo "Another rclone process is already running. Exiting."
-      exit 0
-    fi
-
-    remote=$(echo "$url" | cut -d: -f1)
-    dir="$LIB/$remote/"
+    dir="$LIB/$(printf '%s' "$url" | sed 's/:/\//g')"
     mkdir -p "$dir"
+
+    files_before=$(find "$dir" -type f -exec stat -c '%s %n' {} \; | sort)
 
     printf 'Running: %s copy --no-check-certificate --size-only -v --config %s "%s" "%s"\n' "$RCLONE" "$RCLONE_CONFIG" "$url" "$dir"
     "$RCLONE" copy --no-check-certificate --size-only -v --config "$RCLONE_CONFIG" "$url" "$dir"
+
+    files_after=$(find "$dir" -type f -exec stat -c '%s %n' {} \; | sort)
+    if [ "$files_before" != "$files_after" ]; then
+      changes=true
+    fi
   fi
 done < "$USER_CONFIG"
 
-# list file in lib dir after sync (name and size only, matching --size-only)
-echo "New Library list"
-lib_list_after=$(find "$LIB" -type f ! -name "*.log" -exec stat -c '%s %n' {} \; | sort)
-echo "$lib_list_after"
-
-# compare file list before and after
-if [ "$lib_list_after" = "$lib_list_before" ]; then
-  echo "No Library Change. skipping rescan"
+# refresh library if required
+if [ "$changes" = false ]; then
+  echo "No files changed, skipping re-scan"
 else
-  echo "Library has changed, rescan needed"
+  echo "Files have changed, re-scanning library"
 
   # use NickelDBus for library refresh
   /usr/bin/qndb -t 3000 -s pfmDoneProcessing -m pfmRescanBooksFull

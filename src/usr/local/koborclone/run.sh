@@ -84,8 +84,15 @@ while IFS= read -r url || [ -n "$url" ]; do
 
     files_before=$(find "$dir" -type f -exec stat -c '%s %n' {} \; | sort)
 
-    printf 'Running: %s copy --no-check-certificate --size-only -v --config %s "%s" "%s"\n' "$RCLONE" "$RCLONE_CONFIG" "$url" "$dir"
-    "$RCLONE" copy --no-check-certificate --size-only -v --config "$RCLONE_CONFIG" "$url" "$dir"
+    "$RCLONE" copy \
+      --no-check-certificate \
+      --size-only \
+      --transfers 1 \
+      --cache-dir "$RCLONE_CACHE_DIR" \
+      --log-level NOTICE \
+      --stats 0 \
+      --config "$RCLONE_CONFIG" \
+      "$url" "$dir"
 
     files_after=$(find "$dir" -type f -exec stat -c '%s %n' {} \; | sort)
     if [ "$files_before" != "$files_after" ]; then

@@ -11,4 +11,5 @@ DT="date +%Y-%m-%d_%H:%M:%S"
 
 USER_CONFIG=/mnt/onboard/.adds/koborclone/koborclone.conf
 RCLONE_CONFIG=/mnt/onboard/.adds/koborclone/rclone.conf
+RCLONE_CACHE_DIR=/mnt/onboard/.adds/koborclone/cache
 RCLONE="$KOBORCLONE_DIR/rclone"

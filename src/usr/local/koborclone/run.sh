@@ -37,20 +37,15 @@ if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
 fi
 
 # check internet connection
-echo "$($DT) Checking internet connection"
-ping_exit_code=1
-ping_retries=0
-while [ "$ping_exit_code" -ne 0 ]; do
-  if [ "$ping_retries" -gt 60 ]; then
+retries=0
+while ! wget -q --spider "http://detectportal.firefox.com/success.txt" 2>/dev/null; do
+  echo "$($DT) Waiting for internet connection, retry $retries"
+  retries=$((retries + 1))
+  if [ "$retries" -gt 60 ]; then
     echo "$($DT) ERROR! No internet connection detected"
     exit 1
   fi
-  ping -c 1 -w 3 1.1.1.1 >/dev/null 2>&1
-  ping_exit_code=$?
-  if [ "$ping_exit_code" -ne 0 ]; then
-    sleep 1
-  fi
-  ping_retries=$((ping_retries + 1))
+  sleep 1
 done
 
 # check for qbdb

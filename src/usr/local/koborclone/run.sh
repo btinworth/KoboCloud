@@ -32,7 +32,7 @@ if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
   echo "Uninstalling"
 
   rm -rf /etc/udev/rules.d/97-koborclone.rules
-  rm -rf /usr/local/koborclone/
+  rm -rf /usr/local/koborclone/ &
   exit 0
 fi
 

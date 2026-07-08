@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# prevent concurrent runs
+LOCKFILE="/tmp/koborclone.lock"
+exec 9>"$LOCKFILE"
+if ! flock -n 9; then
+  echo "Another instance is already running. Exiting."
+  exit 0
+fi
+
 # load config
 . "$(dirname "$0")/config.sh"
 export USER_CONFIG
@@ -58,11 +66,6 @@ fi
 if [ ! -x "${RCLONE}" ]; then
   echo "rclone missing: binary at ${RCLONE}"
   exit 1
-fi
-
-if pgrep -x rclone >/dev/null 2>&1; then
-  echo "Another rclone process is already running. Exiting."
-  exit 0
 fi
 
 changes=false

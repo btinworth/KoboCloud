@@ -19,4 +19,7 @@ unzip -p "$RCLONE_ZIP_PATH" "rclone-v${RCLONE_VERSION}-linux-arm-v7/rclone" > "$
 rm -f "$RCLONE_ZIP_PATH"
 chmod +x "$KOBORCLONE_DIR/rclone"
 
+# download cacert.pem
+curl -fsSL "https://curl.se/ca/cacert.pem" -o "$KOBORCLONE_DIR/cacert.pem"
+
 tar -cvzf KoboRoot.tgz -C src etc usr

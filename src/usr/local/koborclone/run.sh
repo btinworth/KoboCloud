@@ -83,7 +83,7 @@ while IFS= read -r url || [ -n "$url" ]; do
     files_before=$(find "$dir" -type f -exec stat -c '%s %n' {} \; | sort)
 
     "$RCLONE" copy \
-      --no-check-certificate \
+      --ca-cert "$KOBORCLONE_DIR/cacert.pem" \
       --size-only \
       --transfers 1 \
       --cache-dir "$RCLONE_CACHE_DIR" \

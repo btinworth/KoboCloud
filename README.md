@@ -17,6 +17,11 @@ Pulls eBooks from the cloud to your Kobo library using [rclone](https://rclone.o
    Dropbox:ebooks
    ```
 
+## Uninstall
+
+To uninstall create a file named `UNINSTALL` in the `.adds/koborclone` directory, then reboot the Kobo.
+Uninstalling will not remove any downloaded books.
+
 ## Acknowledgements
 
 * Based on [KoboClone](https://github.com/fsantini/KoboCloud) by fsantini

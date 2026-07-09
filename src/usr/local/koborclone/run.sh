@@ -37,10 +37,15 @@ if [ ! -e "$RCLONE_CONFIG" ]; then
   fi
 fi
 
-# hand off to the uninstaller if requested
-if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
-  exec "$KOBORCLONE_DIR/uninstall.sh"
-fi
+# uninstall if a file named UNINSTALL exists (ignore case and extension)
+for f in "$CONFIG_DIR"/*; do
+  [ -e "$f" ] || continue
+  name=${f##*/}      # strip directory
+  name=${name%%.*}   # strip extension
+  if [ "$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')" = uninstall ]; then
+    exec "$KOBORCLONE_DIR/uninstall.sh"
+  fi
+done
 
 # check internet connection
 retries=0

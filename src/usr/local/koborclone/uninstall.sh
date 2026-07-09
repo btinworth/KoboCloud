@@ -9,8 +9,8 @@ echo "$($DT) Uninstalling kobo-rclone"
 UDEV_RULE=/etc/udev/rules.d/97-koborclone.rules
 rm -f "$UDEV_RULE"
 
-# remove on-device config, rclone config, cache and logs
-rm -rf "$LOGS"
+# remove the config dir
+rm -rf "$CONFIG_DIR"
 
 # remove the install dir, it holds this script so background the removal
 rm -rf "$KOBORCLONE_DIR" &

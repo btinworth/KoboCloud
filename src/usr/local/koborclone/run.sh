@@ -13,7 +13,7 @@ fi
 export USER_CONFIG
 
 # create lib dir
-[ ! -e "$LIB" ] && mkdir -p "$LIB" >/dev/null 2>&1
+[ ! -e "$LIBRARY_DIR" ] && mkdir -p "$LIBRARY_DIR" >/dev/null 2>&1
 
 # create user config if it doesn't exist
 if [ ! -e "$USER_CONFIG" ]; then
@@ -72,7 +72,7 @@ while IFS= read -r url || [ -n "$url" ]; do
   case "$url" in
     ''|'#'*) continue ;; # skip empty lines and comments
   esac
-  dir="$LIB/$(printf '%s' "$url" | sed 's/:/\//g')"
+  dir="$LIBRARY_DIR/$(printf '%s' "$url" | sed 's/:/\//g')"
   mkdir -p "$dir"
 
   files_before=$(find "$dir" -type f -exec stat -c '%s %n' {} \; | sort)

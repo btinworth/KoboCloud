@@ -77,8 +77,6 @@ while IFS= read -r url || [ -n "$url" ]; do
   dir="$LIBRARY_DIR/$(printf '%s' "$url" | sed 's/:/\//g')"
   mkdir -p "$dir"
 
-  files_before=$(find "$dir" -type f -exec stat -c '%s %n' {} \; | sort)
-
   echo "$($DT) Syncing $url"
   "$RCLONE" copy \
     --ca-cert "$KOBORCLONE_DIR/cacert.pem" \
@@ -86,20 +84,17 @@ while IFS= read -r url || [ -n "$url" ]; do
     --transfers 1 \
     --cache-dir "$RCLONE_CACHE_DIR" \
     --log-level INFO \
+    --error-on-no-transfer \
     --stats 0 \
     --config "$RCLONE_CONFIG" \
     "$url" "$dir"
-
   rclone_exit=$?
-  if [ "$rclone_exit" -ne 0 ]; then
-    echo "$($DT) ERROR: rclone failed for $url (exit code $rclone_exit)"
-    continue
-  fi
 
-  files_after=$(find "$dir" -type f -exec stat -c '%s %n' {} \; | sort)
-  if [ "$files_before" != "$files_after" ]; then
-    changes=true
-  fi
+  case "$rclone_exit" in
+    0) changes=true ;;  # files were transferred
+    9) ;;               # nothing transferred
+    *) echo "$($DT) ERROR: rclone failed for $url (exit code $rclone_exit)" ;;
+  esac
 done < "$USER_CONFIG"
 
 # refresh library if required

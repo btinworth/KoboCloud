@@ -35,13 +35,9 @@ if [ ! -e "$RCLONE_CONFIG" ]; then
   fi
 fi
 
-# check if user config contains the line "UNINSTALL"
+# hand off to the uninstaller if requested
 if grep -q '^UNINSTALL$' "$USER_CONFIG"; then
-  echo "Uninstalling"
-
-  rm -rf /etc/udev/rules.d/97-koborclone.rules
-  rm -rf /usr/local/koborclone/ &
-  exit 0
+  exec "$KOBORCLONE_DIR/uninstall.sh"
 fi
 
 # check internet connection

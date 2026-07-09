@@ -2,7 +2,7 @@
 
 set -e
 
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 KOBORCLONE_DIR="$SCRIPT_DIR/src/usr/local/koborclone"
 
 mkdir -p "$KOBORCLONE_DIR"

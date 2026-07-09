@@ -1,6 +1,6 @@
 #!/bin/sh
 
-KOBORCLONE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+KOBORCLONE_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 USER_CONFIG_TEMPLATE="$KOBORCLONE_DIR/koborclone.conf.tmpl"
 RCLONE_CONFIG_TEMPLATE="$KOBORCLONE_DIR/rclone.conf.tmpl"
 
